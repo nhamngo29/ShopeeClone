@@ -14,8 +14,8 @@ export default function Login() {
     formState: { errors }
   } = useForm<FormData>()
   const onSubmit = handleSubmit(
-    (data) => {},
-    (data) => {
+    () => {},
+    () => {
       const password = getValues('password')
       console.log(password)
     }

@@ -16,5 +16,6 @@ export default defineConfig({
     alias: {
       src: path.resolve(__dirname, './src')
     }
-  }
+  },
+  base: '/ShopeeClone/fe/'
 })

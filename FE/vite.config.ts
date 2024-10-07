@@ -6,6 +6,7 @@ import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()] as any,
+  base: '/shopeeclone/',
   server: {
     port: 3000
   },
@@ -16,6 +17,5 @@ export default defineConfig({
     alias: {
       src: path.resolve(__dirname, './src')
     }
-  },
-  base: '/ShopeeClone/fe/'
+  }
 })

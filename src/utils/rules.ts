@@ -1,4 +1,5 @@
 import { UseFormGetValues } from 'react-hook-form'
+import * as yup from 'yup'
 export const getRules = (getValues?: UseFormGetValues<any>) => ({
   email: {
     required: {
@@ -58,3 +59,34 @@ export const getRules = (getValues?: UseFormGetValues<any>) => ({
     }
   }
 })
+
+export const schema = yup.object({
+  email: yup
+    .string()
+    .required('Vui lòng nhập email')
+    .email('Email không đúng định dạng')
+    .min(5, 'Email tối thiểu 5 ký tự')
+    .max(160, 'Email tối đa 160 ký tự'),
+  password: yup
+    .string()
+    .required('Vui lòng nhập mật khẩu')
+    .min(8, 'Mật khẩu bắt buộc có độ dài lớn hơn 7 ký tự')
+    .max(160, 'Mật khẩu tối đa 160 ký tự')
+    .matches(/[A-Z]/, 'Mật khẩu phải có ít nhất một ký tự viết hoa')
+    .matches(/[a-z]/, 'Mật khẩu phải có ít nhất một ký tự viết thường')
+    .matches(/[0-9]/, 'Mật khẩu phải có ít nhất một chữ số')
+    .matches(/[#?!@$%^&*-]/, 'Mật khẩu phải có ít nhất một ký tự đặc biệt'),
+  confirmPassword: yup
+    .string()
+    .required('Vui lòng nhập lại mật khẩu')
+    .min(8, 'Nhập lại mật khẩu bắt buộc có độ dài lớn hơn 7 ký tự')
+    .max(160, 'Nhập lại mật khẩu tối đa 160 ký tự')
+    .matches(/[A-Z]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự viết hoa')
+    .matches(/[a-z]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự viết thường')
+    .matches(/[0-9]/, 'Nhập lại mật khẩu phải có ít nhất một chữ số')
+    .matches(/[#?!@$%^&*-]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự đặc biệt')
+    .oneOf([yup.ref('passwrod')], 'Nhập lại mật khẩu không khớp')
+})
+export const loginSchema = schema.omit(['confirmPassword'])
+export type LoginSchema = yup.InferType<typeof loginSchema>
+export type Schema = yup.InferType<typeof schema>

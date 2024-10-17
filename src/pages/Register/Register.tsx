@@ -3,19 +3,46 @@ import { Link } from 'react-router-dom'
 import Input from 'src/components/input'
 import { getRules, schema, Schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
+import { registerAccount } from 'src/apis/auth.api'
+import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
+import { ResponseApi } from 'src/types/utils.type'
 type FormData = Schema
 export default function Register() {
   const {
-    getValues,
     register,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(schema)
   })
+  const registerAccountMutation = useMutation({
+    mutationFn: (body: FormData) => registerAccount(body)
+  })
   //const rules = getRules(getValues)
   const onSubmit = handleSubmit((data) => {
-    console.log(data)
+    registerAccountMutation.mutate(data, {
+      onSuccess: (data) => {
+        console.log(data)
+      },
+      onError: (error) => {
+        if (isAxiosUnprocessableEntityError<ResponseApi<FormData>>(error)) {
+          const formError = error.response?.data.response
+          if (formError) {
+            console.log('From eror', formError)
+            Object.keys(formError).forEach((key) => {
+              if (key in formError) {
+                setError(key as keyof FormData, {
+                  message: formError[key as keyof FormData],
+                  type: 'Server'
+                })
+              }
+            })
+          }
+        }
+      }
+    })
   })
   console.log(errors)
   return (
@@ -34,6 +61,22 @@ export default function Register() {
                 placeholder='Email'
               />
               <Input
+                name='userName'
+                register={register}
+                type='userName'
+                className='mt-2'
+                errorMessage={errors.userName?.message}
+                placeholder='Tên đăng nhập'
+              />
+              <Input
+                name='fullName'
+                register={register}
+                type='fullName'
+                className='mt-2'
+                errorMessage={errors.fullName?.message}
+                placeholder='Họ và tên'
+              />
+              <Input
                 name='password'
                 register={register}
                 type='password'
@@ -43,11 +86,11 @@ export default function Register() {
                 autoComplete='on'
               />
               <Input
-                name='confirmPassword'
+                name='PasswordConfirm'
                 register={register}
                 type='password'
                 className='mt-2'
-                errorMessage={errors.confirmPassword?.message}
+                errorMessage={errors.PasswordConfirm?.message}
                 placeholder='Mật khẩu'
                 autoComplete='on'
               />

@@ -36,7 +36,7 @@ export const getRules = (getValues?: UseFormGetValues<any>) => ({
       hasSpecialChar: (value: string) => /[#?!@$%^&*-]/.test(value) || 'Mật khẩu phải có ít nhất một ký tự đặc biệt'
     }
   },
-  confirmPassword: {
+  passwordConfirm: {
     required: {
       value: true,
       message: 'Nhập lại Mật khẩu  là bắt buộc nhập'
@@ -76,17 +76,20 @@ export const schema = yup.object({
     .matches(/[a-z]/, 'Mật khẩu phải có ít nhất một ký tự viết thường')
     .matches(/[0-9]/, 'Mật khẩu phải có ít nhất một chữ số')
     .matches(/[#?!@$%^&*-]/, 'Mật khẩu phải có ít nhất một ký tự đặc biệt'),
-  confirmPassword: yup
+  PasswordConfirm: yup.string().required('Vui lòng nhập lại mật khẩu'),
+  // .min(8, 'Nhập lại mật khẩu bắt buộc có độ dài lớn hơn 7 ký tự')
+  // .max(160, 'Nhập lại mật khẩu tối đa 160 ký tự')
+  // .matches(/[A-Z]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự viết hoa')
+  // .matches(/[a-z]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự viết thường')
+  // .matches(/[0-9]/, 'Nhập lại mật khẩu phải có ít nhất một chữ số')
+  // .matches(/[#?!@$%^&*-]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự đặc biệt')
+  // .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không khớp'),
+  userName: yup.string().required('Vui lòng nhập tên đăng nhập').min(6, 'Tên đăng phải dài hơn 6 ký tự'),
+  fullName: yup
     .string()
-    .required('Vui lòng nhập lại mật khẩu')
-    .min(8, 'Nhập lại mật khẩu bắt buộc có độ dài lớn hơn 7 ký tự')
-    .max(160, 'Nhập lại mật khẩu tối đa 160 ký tự')
-    .matches(/[A-Z]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự viết hoa')
-    .matches(/[a-z]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự viết thường')
-    .matches(/[0-9]/, 'Nhập lại mật khẩu phải có ít nhất một chữ số')
-    .matches(/[#?!@$%^&*-]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự đặc biệt')
-    .oneOf([yup.ref('passwrod')], 'Nhập lại mật khẩu không khớp')
+    .required('Vui lòng nhập họ tên')
+    .matches(/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯưẠ-ỹ\s]+$/, 'Họ tên chỉ chứa chữ cái và khoảng trắng')
 })
-export const loginSchema = schema.omit(['confirmPassword'])
+export const loginSchema = schema.omit(['PasswordConfirm', 'email', 'fullName'])
 export type LoginSchema = yup.InferType<typeof loginSchema>
 export type Schema = yup.InferType<typeof schema>

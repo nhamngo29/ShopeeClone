@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Input from 'src/components/input'
 import { getRules, schema, Schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -7,6 +7,10 @@ import { useMutation } from '@tanstack/react-query'
 import { registerAccount } from 'src/apis/auth.api'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ResponseApi } from 'src/types/utils.type'
+import { useContext } from 'react'
+import { AppContext } from 'src/contexts/app.context'
+import Button from 'src/components/Button'
+import path from 'src/constants/path'
 type FormData = Schema
 export default function Register() {
   const {
@@ -17,6 +21,8 @@ export default function Register() {
   } = useForm<FormData>({
     resolver: yupResolver(schema)
   })
+  const { setIsAuthenticated } = useContext(AppContext)
+  const navigate = useNavigate()
   const registerAccountMutation = useMutation({
     mutationFn: (body: FormData) => registerAccount(body)
   })
@@ -24,7 +30,8 @@ export default function Register() {
   const onSubmit = handleSubmit((data) => {
     registerAccountMutation.mutate(data, {
       onSuccess: (data) => {
-        console.log(data)
+        setIsAuthenticated(true)
+        navigate('/')
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ResponseApi<FormData>>(error)) {
@@ -95,13 +102,17 @@ export default function Register() {
                 autoComplete='on'
               />
               <div className='mt-6'>
-                <button className='bg-[#ee4d2d] uppercase w-full text-center py-3 px-2 text-white text-sm hover:bg-[#e2492b] font-bold opacity-65'>
+                <Button
+                  className='bg-[#ee4d2d] uppercase w-full text-center py-3 px-2 text-white text-sm hover:bg-[#e2492b] font-bold opacity-65'
+                  isLoading={registerAccountMutation.isPending}
+                  disabled={registerAccountMutation.isPending}
+                >
                   Tiếp theo
-                </button>
+                </Button>
               </div>
               <div className='flex items-center justify-center mt-8'>
                 <span className='text-gray-400'>Bạn đã có tài khoản? </span>
-                <Link className='text-red-600 ml-1' to={'/login'}>
+                <Link className='text-red-600 ml-1' to={path.login}>
                   Đăng nhập
                 </Link>
               </div>

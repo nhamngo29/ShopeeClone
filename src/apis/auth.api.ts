@@ -5,3 +5,4 @@ export const registerAccount = (body: { email: string; password: string; Passwor
   http.post<AuthResponse>('api/Auth/Register', body)
 export const loginAccount = (body: { userName: string; password: string }) =>
   http.post<AuthResponse>('api/Auth/Login', body)
+export const logout = () => http.post('api/Auth/logout')

@@ -11,3 +11,7 @@ export function isAxiosUnprocessableEntityError<FormError>(error: unknown): erro
       error.response?.status === HttpStatusCode.Conflict)
   )
 }
+//Dùng cho Unauthorized
+export function isAxiosUnauthorized<FormError>(error: unknown): error is AxiosError<FormError> {
+  return isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized
+}

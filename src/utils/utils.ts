@@ -1,4 +1,6 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios'
+import { jwtDecode } from 'jwt-decode'
+import { User } from 'src/types/user.type'
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   return axios.isAxiosError(error)
@@ -14,4 +16,17 @@ export function isAxiosUnprocessableEntityError<FormError>(error: unknown): erro
 //Dùng cho Unauthorized
 export function isAxiosUnauthorized<FormError>(error: unknown): error is AxiosError<FormError> {
   return isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized
+}
+
+export function decodeJwtToUser(tokenJwt: string): User {
+  const decoded: any = jwtDecode(tokenJwt)
+  const userProfile: User = {
+    userId: decoded.jti,
+    fullName: decoded.fullName,
+    role: decoded.role,
+    email: decoded.email,
+    userName: decoded.sub
+    // Thêm các thông tin khác nếu cần
+  }
+  return userProfile
 }

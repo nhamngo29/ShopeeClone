@@ -5,14 +5,17 @@ import { LoginSchema, loginSchema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import { loginAccount } from 'src/apis/auth.api'
-import { isAxiosUnauthorized, isAxiosUnprocessableEntityError } from 'src/utils/utils'
+import { decodeJwtToUser, isAxiosUnauthorized, isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ResponseApi } from 'src/types/utils.type'
 import { useContext, useState } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/components/Button'
+import { jwtDecode } from 'jwt-decode'
+import { User } from 'src/types/user.type'
+import { use } from 'framer-motion/client'
 type FormData = LoginSchema
 export default function Login() {
-  const { setIsAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()
   const {
     register,
@@ -27,8 +30,9 @@ export default function Login() {
   const onSubmit = handleSubmit((data) => {
     loginAccountMutation.mutate(data, {
       onSuccess: (data) => {
-        console.log(data)
         setIsAuthenticated(true)
+        const user = decodeJwtToUser(data.data.response?.accessToken || '')
+        setProfile(user)
         navigate('/')
       },
       onError: (error) => {

@@ -18,6 +18,7 @@
   "dependencies": {
     "@floating-ui/react": "^0.26.25",
     "@hookform/resolvers": "^3.9.0",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@tanstack/react-query": "^5.59.0",
     "@tanstack/react-query-devtools": "^5.59.0",
     "axios": "^1.7.7",
@@ -56,6 +57,7 @@
     "tailwindcss": "^3.4.13",
     "typescript": "5.5.4",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
+    "vite": "^5.4.1",
+    "vite-plugin-mkcert": "^1.17.6"
   }
 }

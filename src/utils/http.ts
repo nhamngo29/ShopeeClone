@@ -2,23 +2,27 @@ import axios, { AxiosError, AxiosInstance } from 'axios'
 
 import { toast } from 'react-toastify'
 import HttpStatusCode from 'src/constants/httpStatuscode.enum'
-import { clearAccesToeknFormLS, getAccesToeknFormLS, saveAccesToeknToLS } from './auth'
+import { getRefreshTokenFormLS, clearFormLS, setRefreshTokenToLS, setProfileToLS } from './auth'
+import { pathApi } from 'src/constants/path'
+import { decodeJwtToUser } from './utils'
+import { AuthResponse } from 'src/types/auth.type'
 class Http {
   instance: AxiosInstance
-  private accessToken: string
+  private refreshToken: string
   constructor() {
-    this.accessToken = getAccesToeknFormLS()
+    this.refreshToken = getRefreshTokenFormLS()
     this.instance = axios.create({
-      baseURL: 'http://localhost:5129/',
+      baseURL: 'https://localhost:7224/',
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'
-      }
+      },
+      withCredentials: true // Đảm bảo rằng đây được đặ
     })
     this.instance.interceptors.request.use(
       (config) => {
-        if (this.accessToken && config.headers) {
-          config.headers.Authorization = this.accessToken
+        if (this.refreshToken && config.headers) {
+          config.withCredentials = true // Gửi cookie đi kèm
           return config
         }
         return config
@@ -30,14 +34,15 @@ class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config
-        console.log(url)
-        if (url === 'api/Auth/Login' || url === 'api/Auth/Register') {
-          console.log(url)
-          this.accessToken = response.data.response.accessToken
-          saveAccesToeknToLS(this.accessToken)
-        } else if (url === '/logout') {
-          this.accessToken = ''
-          clearAccesToeknFormLS()
+        if (url === pathApi.login || url === pathApi.register) {
+          const data = response.data as AuthResponse
+          this.refreshToken = data.response?.refreshToken || ''
+          setRefreshTokenToLS(this.refreshToken)
+          const user = decodeJwtToUser(data.response?.accessToken || '')
+          setProfileToLS(user)
+        } else if (url === pathApi.logout) {
+          this.refreshToken = ''
+          clearFormLS()
         }
         return response
       },

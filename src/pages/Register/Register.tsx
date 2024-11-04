@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import Input from 'src/components/input'
-import { getRules, schema, Schema } from 'src/utils/rules'
+import { schema, Schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
-import { registerAccount } from 'src/apis/auth.api'
+import authApi from 'src/apis/auth.api'
 import { isAxiosUnprocessableEntityError } from 'src/utils/utils'
 import { ResponseApi } from 'src/types/utils.type'
 import { useContext } from 'react'
@@ -24,7 +24,7 @@ export default function Register() {
   const { setIsAuthenticated } = useContext(AppContext)
   const navigate = useNavigate()
   const registerAccountMutation = useMutation({
-    mutationFn: (body: FormData) => registerAccount(body)
+    mutationFn: (body: FormData) => authApi.registerAccount(body)
   })
   //const rules = getRules(getValues)
   const onSubmit = handleSubmit((data) => {

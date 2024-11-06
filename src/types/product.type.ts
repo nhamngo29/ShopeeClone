@@ -23,13 +23,13 @@ export interface ProductList {
   hasNext: Boolean
 }
 export interface ProductListConfig {
-  pageIndex?: number
+  page?: number | string
   pageSize?: number
-  sort_by?: 'createAt' | 'view' | 'sold' | 'price'
-  order?: 'asc' | 'desc'
+  orderBy?: 'createAt' | 'view' | 'sold' | 'price'
+  ascending?: boolean
   exclude?: string
-  rating_filter?: number
-  price_max?: number
-  price_min?: number
+  rating_filter?: number | string
+  price_max?: number | string
+  price_min?: number | string
   name?: string
 }

@@ -8,7 +8,6 @@ interface Props {
 }
 const RANGE = 2
 export default function Pagination({ queryConfig, pageSize }: Props) {
-  console.log('queryConfig', queryConfig)
   const page = Number(queryConfig.page)
   const renderPagination = () => {
     let dotAfter = false
@@ -73,7 +72,6 @@ export default function Pagination({ queryConfig, pageSize }: Props) {
         )
       })
   }
-  console.log(page)
   return (
     <div className='flex flex-wrap mt-6 justify-center'>
       <Link

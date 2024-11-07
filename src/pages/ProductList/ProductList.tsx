@@ -20,6 +20,7 @@ export default function ProductList() {
       pageSize: queryParams.pageSize || 1,
       orderBy: queryParams.orderBy,
       exclude: queryParams.exclude,
+      order: queryParams.order,
       name: queryParams.name,
       ascending: queryParams.ascending,
       price_max: queryParams.price_max,

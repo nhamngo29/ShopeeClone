@@ -26,6 +26,7 @@ export interface ProductListConfig {
   page?: number | string
   pageSize?: number
   orderBy?: 'createAt' | 'view' | 'sold' | 'price'
+  order?: boolean
   ascending?: boolean
   exclude?: string
   rating_filter?: number | string

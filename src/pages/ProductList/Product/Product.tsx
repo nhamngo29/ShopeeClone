@@ -25,12 +25,12 @@ export default function Product({ product }: Props) {
               style={{ lineHeight: '1' }}
             >
               <span className='text-xs'>₫</span>
-              <span className='text-xs'>{product.price}</span>
+              <span className='text-sm'>{product.price}</span>
             </div>
 
             <div className='text-orange truncate ml-1 flex items-center'>
               <span className='text-xs'>₫</span>
-              <span className='text-xs'>{formatCurrency(product.price)}</span>
+              <span className='text-sm'>{formatCurrency(product.price)}</span>
             </div>
           </div>
           <div className='mt-3 flex items-center justify-start'>

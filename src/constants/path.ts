@@ -11,6 +11,7 @@ export const pathApi = {
   login: 'api/Auth/sign-in',
   register: 'api/Auth/sign-up',
   logout: 'api/Auth/sign-out',
-  products: 'api/Product/products'
+  products: 'api/Product/products',
+  categories: 'api/Category/categoies'
 } as const
 export default path

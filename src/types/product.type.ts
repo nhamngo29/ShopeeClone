@@ -8,10 +8,7 @@ export interface Product {
   name: string
   image: string
   images: string[]
-  cateogry: {
-    name: string
-    id: string
-  }
+  cateogryId?: string
 }
 export interface ProductList {
   items: Product[]
@@ -26,11 +23,12 @@ export interface ProductListConfig {
   page?: number | string
   pageSize?: number
   orderBy?: 'createAt' | 'view' | 'sold' | 'price'
-  order?: boolean
+  order?: 'asc' | 'desc'
   ascending?: boolean
   exclude?: string
   rating_filter?: number | string
   price_max?: number | string
   price_min?: number | string
   name?: string
+  categoryId?: string
 }

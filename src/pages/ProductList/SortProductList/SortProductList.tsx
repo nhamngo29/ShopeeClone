@@ -1,7 +1,8 @@
 import { ProductListConfig } from 'src/types/product.type'
 import { QueryConfig } from '../ProductList'
 import classNames from 'classnames'
-import { _orderBy } from 'src/constants/product'
+import { orderBy as orderByConstant } from 'src/constants/product'
+import { order as orderConstant } from 'src/constants/product'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import path from 'src/constants/path'
 import { omit } from 'lodash'
@@ -11,7 +12,7 @@ interface Props {
   pageSize: number
 }
 export default function SortProductList({ queryConfig, pageSize }: Props) {
-  const { orderBy = _orderBy.createAt, page } = queryConfig
+  const { orderBy = orderByConstant.createAt, page } = queryConfig
   const { order } = queryConfig
   const pageNumber = Number(page)
   const navigate = useNavigate()
@@ -41,7 +42,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
           {
             ...queryConfig,
             order: String(orderValue),
-            orderBy: _orderBy.price
+            orderBy: orderByConstant.price
           },
           ['page']
         )
@@ -56,33 +57,33 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
           <button
             className={classNames(
               'h-8 px-4 capitalize text-sm rounded-sm',
-              isActiveOrderBy(_orderBy.view)
+              isActiveOrderBy(orderByConstant.createAt)
                 ? 'bg-orange text-white hover:bg-orange/80'
                 : 'bg-white text-black hover:bg-slate-100'
             )}
-            onClick={() => handleSort(_orderBy.view)}
+            onClick={() => handleSort(orderByConstant.createAt)}
           >
             Phổ biến
           </button>
           <button
             className={classNames(
               'h-8 px-4 capitalize text-sm rounded-sm',
-              isActiveOrderBy(_orderBy.createAt)
+              isActiveOrderBy(orderByConstant.view)
                 ? 'bg-orange text-white hover:bg-orange/80'
                 : 'bg-white text-black hover:bg-slate-100'
             )}
-            onClick={() => handleSort(_orderBy.createAt)}
+            onClick={() => handleSort(orderByConstant.view)}
           >
             Mới nhất
           </button>
           <button
             className={classNames(
               'h-8 px-4 capitalize text-sm rounded-sm',
-              isActiveOrderBy(_orderBy.sold)
+              isActiveOrderBy(orderByConstant.sold)
                 ? 'bg-orange text-white hover:bg-orange/80'
                 : 'bg-white text-black hover:bg-slate-100'
             )}
-            onClick={() => handleSort(_orderBy.sold)}
+            onClick={() => handleSort(orderByConstant.sold)}
           >
             Bán chạy
           </button>
@@ -90,13 +91,13 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
             className='h-8 px-4 bg-white text-left text-sm outline-none capitalize border border-gray-300 rounded-sm shadow-sm focus:border-gray-400'
             title='Giá'
             defaultValue={order}
-            onChange={(event) => handlePriceOrder(event.target.value === 'true')}
+            onChange={(event) => handlePriceOrder(event.target.value as Exclude<ProductListConfig['order'], undefined>)}
           >
             <option value='' disabled hidden>
               Giá
             </option>
-            <option value={'true'}>Giá: Thấp đến cao</option>
-            <option value={'false'}>Giá: Cao đến Thấp</option>
+            <option value={orderConstant.desc}>Giá: Thấp đến cao</option>
+            <option value={orderConstant.asc}>Giá: Cao đến Thấp</option>
           </select>
         </div>
         <div className='flex items-center'>

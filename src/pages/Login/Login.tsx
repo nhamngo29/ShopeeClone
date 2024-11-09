@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import Input from 'src/components/input'
-import { LoginSchema, loginSchema } from 'src/utils/rules'
+import Input from 'src/components/Input'
+import { Schema, schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
@@ -10,10 +10,8 @@ import { ResponseApi } from 'src/types/utils.type'
 import { useContext, useState } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/components/Button'
-import { jwtDecode } from 'jwt-decode'
-import { User } from 'src/types/user.type'
-import { use } from 'framer-motion/client'
-type FormData = LoginSchema
+type FormData = Pick<Schema, 'userName' | 'password'>
+const loginSchema = schema.pick(['userName', 'password'])
 export default function Login() {
   const { setIsAuthenticated, setProfile } = useContext(AppContext)
   const navigate = useNavigate()

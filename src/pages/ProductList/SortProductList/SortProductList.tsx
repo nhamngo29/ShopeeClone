@@ -20,7 +20,6 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
     return orderBy === orderByValue
   }
   const handleSort = (orderByValue: Exclude<ProductListConfig['orderBy'], undefined>) => {
-    console.log('orderValue')
     navigate({
       pathname: path.home,
       search: createSearchParams(

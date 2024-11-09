@@ -18,15 +18,15 @@ export default function ProductList() {
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || '1',
-      pageSize: queryParams.pageSize || 15,
       orderBy: queryParams.orderBy,
       exclude: queryParams.exclude,
       order: queryParams.order,
       categoryId: queryParams.categoryId,
       name: queryParams.name,
       ascending: queryParams.ascending,
-      price_max: queryParams.price_max,
-      price_min: queryParams.price_min
+      maxPrice: queryParams.maxPrice,
+      minPrice: queryParams.minPrice,
+      ratingFilter: queryParams.ratingFilter
     },
     isUndefined
   )

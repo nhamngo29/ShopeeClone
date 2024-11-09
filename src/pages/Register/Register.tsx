@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import Input from 'src/components/input'
+import Input from 'src/components/Input'
 import { schema, Schema } from 'src/utils/rules'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation } from '@tanstack/react-query'
@@ -11,7 +11,8 @@ import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/components/Button'
 import path from 'src/constants/path'
-type FormData = Schema
+type FormData = Pick<Schema, 'email' | 'password' | 'PasswordConfirm' | 'fullName' | 'userName'>
+const registerSchema = schema.pick(['email', 'PasswordConfirm', 'fullName', 'password', 'userName'])
 export default function Register() {
   const {
     register,
@@ -19,7 +20,7 @@ export default function Register() {
     setError,
     formState: { errors }
   } = useForm<FormData>({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(registerSchema)
   })
   const { setIsAuthenticated } = useContext(AppContext)
   const navigate = useNavigate()

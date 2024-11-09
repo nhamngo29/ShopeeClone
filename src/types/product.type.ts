@@ -21,14 +21,13 @@ export interface ProductList {
 }
 export interface ProductListConfig {
   page?: number | string
-  pageSize?: number
   orderBy?: 'createAt' | 'view' | 'sold' | 'price'
   order?: 'asc' | 'desc'
   ascending?: boolean
   exclude?: string
-  rating_filter?: number | string
-  price_max?: number | string
-  price_min?: number | string
+  ratingFilter?: number | string
+  maxPrice?: number | string
+  minPrice?: number | string
   name?: string
   categoryId?: string
 }

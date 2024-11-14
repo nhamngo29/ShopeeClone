@@ -1,5 +1,5 @@
 import { ProductListConfig } from 'src/types/product.type'
-import { QueryConfig } from '../ProductList'
+import { QueryConfig } from '../../ProductList'
 import classNames from 'classnames'
 import { orderBy as orderByConstant } from 'src/constants/product'
 import { order as orderConstant } from 'src/constants/product'

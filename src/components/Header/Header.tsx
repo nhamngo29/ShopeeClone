@@ -13,6 +13,7 @@ import { omit } from 'lodash'
 import cartApi from 'src/apis/cart.api'
 import noProductInCart from 'src/assets/no-item-in-cart.png'
 import { formatCurrency, generateNameId } from 'src/utils/utils'
+import { queryClient } from 'src/main'
 type FromData = Pick<Schema, 'keyword'>
 
 const nameSchema = schema.pick(['keyword'])
@@ -32,6 +33,7 @@ export default function Header() {
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)
+      queryClient.removeQueries({ queryKey: ['getItemsInCart'] })
     }
   })
   const { data: productInCartData } = useQuery({
@@ -39,7 +41,6 @@ export default function Header() {
     queryFn: () => cartApi.getItemsInCart()
   })
   const producstInCartData = productInCartData?.data.response
-  console.log('producstInCartData', producstInCartData)
   const handleLogout = () => {
     loginAccountMutation.mutate()
   }
@@ -247,9 +248,11 @@ export default function Header() {
                     d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'
                   />
                 </svg>
-                <span className='absolute top-[-5px] left-6 rounded-full bg-white text-orange text-xs px-[9px] py-[1px] border-[0.125rem] border-solid border-orange'>
-                  {producstInCartData?.products.length}
-                </span>
+                {producstInCartData?.products && producstInCartData?.products.length > 0 && (
+                  <span className='absolute top-[-5px] left-6 rounded-full bg-white text-orange text-xs px-[9px] py-[1px] border-[0.125rem] border-solid border-orange'>
+                    {producstInCartData?.products.length}
+                  </span>
+                )}
               </Link>
             </Popover>
           </div>

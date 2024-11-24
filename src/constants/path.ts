@@ -17,7 +17,9 @@ export const pathApi = {
   products: 'api/Product/products',
   product: 'api/Product/product',
   categories: 'api/Category/categoies',
-  addToCart: 'api/Cart/add-to-cart',
-  getItemsInCart: 'api/Cart/get-items-in-cart'
+  addCartItem: 'api/Cart/add-to-cart',
+  getCartItem: 'api/Cart/get-items-in-cart',
+  deleteCartItem: 'api/Cart/delete-cart-item',
+  updateCartItem: 'api/Cart/update-cart-item'
 } as const
 export default path

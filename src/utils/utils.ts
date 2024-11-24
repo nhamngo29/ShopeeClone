@@ -1,6 +1,7 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import { User } from 'src/types/user.type'
+import { array } from 'yup'
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   return axios.isAxiosError(error)
@@ -41,4 +42,13 @@ export function formatNumberToSocialStyle(value: number) {
   })
     .format(value)
     .replace('.', ',')
+}
+export const generateNameId = ({ name, id }: { name: string; id: string }) => {
+  return removeSpecialCharacter(name).replace(/\s/g, '-') + `-i.${id}`
+}
+const removeSpecialCharacter = (str: string) =>
+  str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|\/|,|\.|\:|\;|\'|\"|\&|\#|\[|\]|~|\$|_|`|-|{|}|\||\\/g, '')
+export const getIdFromNameId = (nameId: string) => {
+  const array = nameId.split('-i.')
+  return array[array.length - 1]
 }

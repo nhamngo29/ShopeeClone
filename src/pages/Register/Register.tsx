@@ -38,7 +38,6 @@ export default function Register() {
         if (isAxiosUnprocessableEntityError<ResponseApi<FormData>>(error)) {
           const formError = error.response?.data.response
           if (formError) {
-            console.log('From eror', formError)
             Object.keys(formError).forEach((key) => {
               if (key in formError) {
                 setError(key as keyof FormData, {
@@ -52,7 +51,6 @@ export default function Register() {
       }
     })
   })
-  console.log(errors)
   return (
     <div className='bg-orange'>
       <div className='container'>

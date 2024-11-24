@@ -1,14 +1,15 @@
 export interface Product {
-  id: string
+  productId: string
   price: number
   rating: number
-  quantity: number
+  stock: number
   sold: number
   view: number
   name: string
   image: string
   images: string[]
   cateogryId?: string
+  description: string
 }
 export interface ProductList {
   items: Product[]
@@ -28,6 +29,6 @@ export interface ProductListConfig {
   ratingFilter?: number | string
   maxPrice?: number | string
   minPrice?: number | string
-  name?: string
+  keyword?: string
   categoryId?: string
 }

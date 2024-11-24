@@ -1,11 +1,31 @@
-import { Link } from 'react-router-dom'
+import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Popover from '../Popover'
 import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import path from 'src/constants/path'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
+import useQueryConfig from 'src/hooks/useQueryConfig'
+import { useForm } from 'react-hook-form'
+import { schema, Schema } from 'src/utils/rules'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { omit } from 'lodash'
+import cartApi from 'src/apis/cart.api'
+import noProductInCart from 'src/assets/no-item-in-cart.png'
+import { formatCurrency, generateNameId } from 'src/utils/utils'
+type FromData = Pick<Schema, 'keyword'>
+
+const nameSchema = schema.pick(['keyword'])
+const MAX_PRODUCT_IN_CART = 5
 export default function Header() {
+  const navigate = useNavigate()
+  const queryConfig = useQueryConfig()
+  const { register, handleSubmit } = useForm<FromData>({
+    defaultValues: {
+      keyword: ''
+    },
+    resolver: yupResolver(nameSchema)
+  })
   const { setIsAuthenticated, isAuthenticated, setProfile, profile } = useContext(AppContext)
   const loginAccountMutation = useMutation({
     mutationFn: authApi.logout,
@@ -14,10 +34,36 @@ export default function Header() {
       setProfile(null)
     }
   })
-
+  const { data: productInCartData } = useQuery({
+    queryKey: ['getItemsInCart'],
+    queryFn: () => cartApi.getItemsInCart()
+  })
+  const producstInCartData = productInCartData?.data.response
+  console.log('producstInCartData', producstInCartData)
   const handleLogout = () => {
     loginAccountMutation.mutate()
   }
+  const onSubmitSearch = handleSubmit((data) => {
+    const config = queryConfig.order
+      ? omit(
+          {
+            ...queryConfig,
+            keyword: data.keyword
+          },
+          ['order', 'orderBy', 'page']
+        )
+      : omit(
+          {
+            ...queryConfig,
+            keyword: data.keyword
+          },
+          ['page']
+        )
+    navigate({
+      pathname: path.home,
+      search: createSearchParams(config).toString()
+    })
+  })
   return (
     <div className='pb-5 pt-2 bg-gradient-to-b from-[#f53d2d] to-[#f63] text-white'>
       <div className='container'>
@@ -114,13 +160,13 @@ export default function Header() {
               </g>
             </svg>
           </Link>
-          <form className='col-span-9'>
+          <form className='col-span-9' onSubmit={onSubmitSearch}>
             <div className='bg-white rounded-sm p-1 flex'>
               <input
                 placeholder='FREESHIP ĐƠN TỪ 0Đ'
                 type='text'
-                name='search'
                 className='text-black px-3 py-2 flex-grow border-none outline-none bg-transparent'
+                {...register('keyword')}
               />
               <button className='rounded-sm py-2 px-6 flex-shrink-0 bg-orange hover:opaccity-90'>
                 <svg
@@ -145,123 +191,48 @@ export default function Header() {
               placement='bottom-end'
               renderPopover={
                 <div className='bg-white relative shadow-md rounded-sm border border-gray-200 max-w-[400px] text-sm'>
-                  <div className='p-2'>
-                    <div className='text-gray-400 capitalize'>sản phẩm mới thêm</div>
-                    <div className='mt-5'>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lvh3sqr6ip3hdd_tn'
-                            alt='ảnh'
-                            className='w-11 h-11 object-cover'
-                          />
-                        </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            Áo Thun Phối số 99 cổ chữ V Hot Trend Form Rộng Tay Lỡ Cho Nam Và Nữ số 99 HOT
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫39.000</span>
-                        </div>
+                  {producstInCartData?.products && producstInCartData.products.length > 0 ? (
+                    <div className='p-2'>
+                      <div className='text-gray-400 capitalize'>sản phẩm mới thêm</div>
+                      <div className='mt-5'>
+                        {producstInCartData.products.slice(0, MAX_PRODUCT_IN_CART).map((cartItem) => (
+                          <Link to={`${path.home}${generateNameId({ name: cartItem.name, id: cartItem.productId })}`}>
+                            <div className='mt-2 py-2 px-1 flex hover:bg-gray-100' key={cartItem.productId}>
+                              <div className='flex-shrink-0'>
+                                <img src={cartItem.image} alt={cartItem.name} className='w-11 h-11 object-cover' />
+                              </div>
+                              <div className='flex-grow ml-2 overflow-hidden'>
+                                <div className='truncate'>{cartItem.name}</div>
+                              </div>
+                              <div className='ml-2 flex-shrink-0'>
+                                <span className='text-orange'>₫{formatCurrency(cartItem.price)}</span>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
                       </div>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lvh3sqr6ip3hdd_tn'
-                            alt='ảnh'
-                            className='w-11 h-11 object-cover'
-                          />
+                      <div className='flex mt-6 items-center justify-between'>
+                        <div className='capitalize text-xs text-gray-500'>
+                          {producstInCartData.products.length > MAX_PRODUCT_IN_CART
+                            ? producstInCartData.products.length - MAX_PRODUCT_IN_CART
+                            : ''}{' '}
+                          Thêm vào giỏi hàng
                         </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            Áo Thun Phối số 99 cổ chữ V Hot Trend Form Rộng Tay Lỡ Cho Nam Và Nữ số 99 HOT
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫39.000</span>
-                        </div>
-                      </div>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lvh3sqr6ip3hdd_tn'
-                            alt='ảnh'
-                            className='w-11 h-11 object-cover'
-                          />
-                        </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            Áo Thun Phối số 99 cổ chữ V Hot Trend Form Rộng Tay Lỡ Cho Nam Và Nữ số 99 HOT
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫39.000</span>
-                        </div>
-                      </div>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lvh3sqr6ip3hdd_tn'
-                            alt='ảnh'
-                            className='w-11 h-11 object-cover'
-                          />
-                        </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            Áo Thun Phối số 99 cổ chữ V Hot Trend Form Rộng Tay Lỡ Cho Nam Và Nữ số 99 HOT
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫39.000</span>
-                        </div>
-                      </div>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lvh3sqr6ip3hdd_tn'
-                            alt='ảnh'
-                            className='w-11 h-11 object-cover'
-                          />
-                        </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            Áo Thun Phối số 99 cổ chữ V Hot Trend Form Rộng Tay Lỡ Cho Nam Và Nữ số 99 HOT
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫39.000</span>
-                        </div>
-                      </div>
-                      <div className='mt-4 flex'>
-                        <div className='flex-shrink-0'>
-                          <img
-                            src='https://down-vn.img.susercontent.com/file/vn-11134207-7r98o-lvh3sqr6ip3hdd_tn'
-                            alt='ảnh'
-                            className='w-11 h-11 object-cover'
-                          />
-                        </div>
-                        <div className='flex-grow ml-2 overflow-hidden'>
-                          <div className='truncate'>
-                            Áo Thun Phối số 99 cổ chữ V Hot Trend Form Rộng Tay Lỡ Cho Nam Và Nữ số 99 HOT
-                          </div>
-                        </div>
-                        <div className='ml-2 flex-shrink-0'>
-                          <span className='text-orange'>₫39.000</span>
-                        </div>
+                        <button className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
+                          Xem giỏ hàng
+                        </button>
                       </div>
                     </div>
-                    <div className='flex mt-6 items-center justify-between'>
-                      <div className='capitalize text-xs text-gray-500'>Thêm vào giỏi hàng</div>
-                      <button className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
-                        Xem giỏ hàng
-                      </button>
+                  ) : (
+                    <div className='p-2 w-[400px] h-[200px] flex flex-col items-center justify-center'>
+                      <img src={noProductInCart} alt='no product in cart' className='w-32 h-32' />
+                      <div className='capitalizem'>Chưa có sản phẩm</div>
                     </div>
-                  </div>
+                  )}
                 </div>
               }
             >
-              <Link to='/'>
+              <Link to='/' className='relative'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -276,6 +247,9 @@ export default function Header() {
                     d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z'
                   />
                 </svg>
+                <span className='absolute top-[-5px] left-6 rounded-full bg-white text-orange text-xs px-[9px] py-[1px] border-[0.125rem] border-solid border-orange'>
+                  {producstInCartData?.products.length}
+                </span>
               </Link>
             </Popover>
           </div>

@@ -106,7 +106,8 @@ export const schema = yup.object({
     name: 'price-not-allowed',
     message: 'Giá không phù hợp',
     test: testPriceMinMax
-  })
+  }),
+  keyword: yup.string().trim().required('Tìm kiếm sản phẩm bắt buộc')
 })
 export const loginSchema = schema.omit(['PasswordConfirm', 'email', 'fullName'])
 export type LoginSchema = yup.InferType<typeof loginSchema>

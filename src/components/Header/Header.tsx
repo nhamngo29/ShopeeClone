@@ -219,9 +219,12 @@ export default function Header() {
                             : ''}{' '}
                           Thêm vào giỏi hàng
                         </div>
-                        <button className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
+                        <Link
+                          to={path.cart}
+                          className='capitalize bg-orange hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'
+                        >
                           Xem giỏ hàng
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   ) : (
@@ -233,7 +236,7 @@ export default function Header() {
                 </div>
               }
             >
-              <Link to='/' className='relative'>
+              <Link to='/Cart' className='relative'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'

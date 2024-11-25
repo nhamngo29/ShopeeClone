@@ -9,8 +9,10 @@ const cartApi = {
   getItemsInCart() {
     return http.get<ResponseApi<CartItems>>(pathApi.getCartItem)
   },
-  deleteCartItem(productId: string) {
-    return http.delete<ResponseApi<string>>(`${pathApi.deleteCartItem}/${productId}`)
+  deleteCartItem(productsId: string[]) {
+    return http.delete<ResponseApi<string>>(`${pathApi.deleteCartItem}`, {
+      data: productsId
+    })
   },
   updateCartItem(body: { productId: string; quantity: number }) {
     return http.patch<ResponseApi<string>>(pathApi.updateCartItem, body)

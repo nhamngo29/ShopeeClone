@@ -11,7 +11,9 @@ const cartApi = {
   },
   deleteCartItem(productsId: string[]) {
     return http.delete<ResponseApi<string>>(`${pathApi.deleteCartItem}`, {
-      data: productsId
+      data: {
+        productsId: productsId
+      }
     })
   },
   updateCartItem(body: { productId: string; quantity: number }) {

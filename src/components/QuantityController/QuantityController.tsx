@@ -17,6 +17,7 @@ export default function QuantityController({
   classNameWrapper = 'ml-10',
   value,
   onFocusOut,
+  min,
   onType,
   ...res
 }: Props) {
@@ -39,7 +40,8 @@ export default function QuantityController({
   }
   const decrease = () => {
     let _value = Number(value || localValue) - 1
-    if (_value < 1) _value = 1
+    console.log('_value', _value)
+    if (_value < Number(min) || 0) _value = 1
     onDecrease && onDecrease(_value)
     setLocalValue(_value)
   }

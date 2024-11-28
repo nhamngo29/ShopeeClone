@@ -9,6 +9,7 @@ import { CartItem, CartItems } from 'src/types/cart.type'
 import { formatCurrency, generateNameId } from 'src/utils/utils'
 import { current, produce } from 'immer'
 import { result } from 'lodash'
+import { Console } from 'console'
 interface ExtendedCartItem extends CartItem {
   disabled: boolean
   checked: boolean
@@ -74,16 +75,18 @@ export default function Cart() {
     )
   }
   const handleQuantity = (cartIndex: number, value: number, enable: boolean) => {
-    const cartItem = extendedPurchases[cartIndex]
-    console.log(cartItem)
+    console.log('valueHandleQuantity', value)
     console.log('enable', enable)
     if (enable) {
-      setExtendedPurchases(
-        produce((draft) => {
-          draft[cartIndex].disabled = true
-        })
-      )
-      updateCartItemMutation.mutate({ productId: cartItem.productId, quantity: value })
+      const cartItem = extendedPurchases[cartIndex]
+      if (enable) {
+        setExtendedPurchases(
+          produce((draft) => {
+            draft[cartIndex].disabled = true
+          })
+        )
+        updateCartItemMutation.mutate({ productId: cartItem.productId, quantity: value })
+      }
     }
   }
   const handleTypeQuantity = (cartIndex: number) => (value: number) => {
@@ -159,7 +162,7 @@ export default function Cart() {
                     >
                       <img src={cartItem.image} alt={cartItem.name} className='h-full w-full object-cover' />
                     </Link>
-                    <div className='flex-grow px-2 pt-1 pb-2'>
+                    <div className='flex-grow px-2 pt-1 pb-2 text-left'>
                       <Link
                         to={`${path.home}${generateNameId({ name: cartItem.name, id: cartItem.productId })}`}
                         className='line-clamp-2'
@@ -187,20 +190,19 @@ export default function Cart() {
                   <div className='flex justify-between items-center md:justify-center md:col-span-1'>
                     <span className='md:hidden'>Số lượng:</span>
                     <QuantityController
-                      min={1}
+                      min={0}
                       max={cartItem.stock}
                       value={cartItem.quantity}
                       classNameWrapper='flex items-center'
-                      onIncrease={(value) => handleQuantity(index, value, value <= cartItem.stock)}
-                      onDecrease={(value) => handleQuantity(index, value, value >= 1)}
+                      onIncrease={(value) => handleQuantity(index, value, value < cartItem.stock)}
+                      onDecrease={(value) => {
+                        console.log('value', value)
+                        handleQuantity(index, value, value > 0)
+                      }}
                       onType={handleTypeQuantity(index)}
                       disabled={cartItem.disabled}
                       onFocusOut={(value) => {
-                        handleQuantity(
-                          index,
-                          value,
-                          value <= cartItem.stock && value >= 1 && value != cartItem.quantity
-                        )
+                        handleQuantity(index, value, value <= cartItem.stock && value > 0)
                       }}
                     />
                   </div>

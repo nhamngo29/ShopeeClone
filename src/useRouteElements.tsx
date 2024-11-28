@@ -2,14 +2,15 @@ import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import ProductList from './pages/ProductList'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import RegisterLayout from './layouts/RegisterLayout'
-import MainLayout from './layouts/MainLayout'
 import Profile from './pages/Profile'
 import { useContext } from 'react'
 import { AppContext } from './contexts/app.context'
 import path from './constants/path'
 import ProductDetail from './pages/ProductDetail'
 import Cart from './pages/Cart'
+import RegisterHeader from './components/RegisterHeader'
+import Layout from './layouts'
+import CartHeader from './components/CartHeader'
 
 function ProtectedRouted() {
   const { isAuthenticated } = useContext(AppContext)
@@ -25,18 +26,18 @@ export default function useRouteElements() {
       path: '/',
       index: true,
       element: (
-        <MainLayout>
+        <Layout>
           <ProductList />
-        </MainLayout>
+        </Layout>
       )
     },
 
     {
       path: path.cart,
       element: (
-        <MainLayout>
+        <Layout Header={<CartHeader />}>
           <Cart />
-        </MainLayout>
+        </Layout>
       )
     },
     {
@@ -46,9 +47,9 @@ export default function useRouteElements() {
         {
           path: path.profile,
           element: (
-            <MainLayout>
+            <Layout>
               <Profile />
-            </MainLayout>
+            </Layout>
           )
         }
       ]
@@ -57,9 +58,9 @@ export default function useRouteElements() {
       path: path.productDetail,
       index: true,
       element: (
-        <MainLayout>
+        <Layout>
           <ProductDetail />
-        </MainLayout>
+        </Layout>
       )
     },
     {
@@ -69,17 +70,17 @@ export default function useRouteElements() {
         {
           path: path.login,
           element: (
-            <RegisterLayout>
+            <Layout Header={<RegisterHeader />}>
               <Login />
-            </RegisterLayout>
+            </Layout>
           )
         },
         {
           path: path.register,
           element: (
-            <RegisterLayout>
+            <Layout Header={<RegisterHeader />}>
               <Register />
-            </RegisterLayout>
+            </Layout>
           )
         }
       ]

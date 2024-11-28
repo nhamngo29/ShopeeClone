@@ -5,11 +5,9 @@ import cartApi from 'src/apis/cart.api'
 import Button from 'src/components/Button'
 import QuantityController from 'src/components/QuantityController'
 import path from 'src/constants/path'
-import { CartItem, CartItems } from 'src/types/cart.type'
+import { CartItem } from 'src/types/cart.type'
 import { formatCurrency, generateNameId } from 'src/utils/utils'
-import { current, produce } from 'immer'
-import { result } from 'lodash'
-import { Console } from 'console'
+import { produce } from 'immer'
 interface ExtendedCartItem extends CartItem {
   disabled: boolean
   checked: boolean
@@ -36,7 +34,7 @@ export default function Cart() {
   })
   const deleteCartImtesMutation = useMutation({
     mutationFn: cartApi.deleteCartItem,
-    onSuccess: (_, body) => {
+    onSuccess: () => {
       refetch()
     }
   })
@@ -47,9 +45,7 @@ export default function Cart() {
   const totalCheckedCartItemsPrice = checkedCartItems.reduce((result, current) => {
     return result + current.price * current.quantity
   }, 0)
-  const totalCheckedCartItemsSavingPrice = checkedCartItems.reduce((result, current) => {
-    return result + current.price * current.quantity
-  }, 0)
+
   useEffect(() => {
     setExtendedPurchases(
       producstInCartData?.products.map((cartItem) => ({

@@ -30,7 +30,7 @@ export default function Register() {
   //const rules = getRules(getValues)
   const onSubmit = handleSubmit((data) => {
     registerAccountMutation.mutate(data, {
-      onSuccess: (data) => {
+      onSuccess: () => {
         setIsAuthenticated(true)
         navigate('/')
       },

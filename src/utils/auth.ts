@@ -1,11 +1,13 @@
 import { User } from 'src/types/user.type'
-import { json } from 'stream/consumers'
 
+export const LocalStorageEventTarget = new EventTarget()
 export const setRefreshTokenToLS = (refresh_token: string) => {
   localStorage.setItem('refresh_token', refresh_token)
 }
 export const clearFormLS = () => {
   localStorage.removeItem('refresh_token'), localStorage.removeItem('profile')
+  const clearLSEvent = new Event('clearFormLS')
+  LocalStorageEventTarget.dispatchEvent(clearLSEvent)
 }
 export const getRefreshTokenFormLS = () => {
   return localStorage.getItem('refresh_token') || ''

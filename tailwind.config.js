@@ -1,7 +1,9 @@
 const plugin = require('tailwindcss/plugin')
 /** @type {import('tailwindcss').Config}*/
 module.exports = {
-  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
+  content: [
+    './src/**/*.{html,js,jsx,ts,tsx}' // Đảm bảo rằng Tailwind có thể quét tất cả các tệp nơi bạn sử dụng các lớp CSS
+  ],
   corePlugins: {
     container: false
   },

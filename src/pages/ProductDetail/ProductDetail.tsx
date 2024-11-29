@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import ProductRating from 'src/components/ProductRating'
@@ -11,10 +11,10 @@ import 'react-medium-image-zoom/dist/styles.css'
 import Product from '../ProductList/components/Product'
 import QuantityController from 'src/components/QuantityController'
 import cartApi from 'src/apis/cart.api'
-import { queryClient } from 'src/main'
 import Toast from 'src/components/Toast'
 
 export default function ProductDetail() {
+  const queryClient = useQueryClient()
   const [buyCount, setBuyCount] = useState(1)
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)

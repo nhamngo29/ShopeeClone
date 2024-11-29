@@ -21,7 +21,7 @@ export default function Input({
   const registerResult = register && name ? register(name, rules) : {}
   return (
     <div className={className}>
-      <input className={classNameInput} {...registerResult} />
+      <input className={classNameInput} {...registerResult} {...rest} />
       <div className={classNameError}>{errorMessage}</div>
     </div>
   )

@@ -2,7 +2,6 @@ import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import ProductList from './pages/ProductList'
 import Login from './pages/Login'
 import Register from './pages/Register'
-import Profile from './pages/Profile'
 import { useContext } from 'react'
 import { AppContext } from './contexts/app.context'
 import path from './constants/path'
@@ -11,6 +10,10 @@ import Cart from './pages/Cart'
 import RegisterHeader from './components/RegisterHeader'
 import Layout from './layouts'
 import CartHeader from './components/CartHeader'
+import UserLayout from './pages/User/UserLayout'
+import ChangePassword from './pages/User/pages/ChangePassword'
+import HistoryPurchase from './pages/User/pages/HistoryPurchase'
+import Profile from './pages/User/pages/Profile'
 
 function ProtectedRouted() {
   const { isAuthenticated } = useContext(AppContext)
@@ -41,14 +44,52 @@ export default function useRouteElements() {
       )
     },
     {
-      path: '',
+      path: path.profile,
       element: <ProtectedRouted />,
       children: [
         {
           path: path.profile,
           element: (
             <Layout>
-              <Profile />
+              <UserLayout>
+                <Profile />
+              </UserLayout>
+            </Layout>
+          )
+        }
+      ]
+    },
+    {
+      path: path.user,
+      element: <ProtectedRouted />,
+      children: [
+        {
+          path: path.profile,
+          element: (
+            <Layout>
+              <UserLayout>
+                <Profile />
+              </UserLayout>
+            </Layout>
+          )
+        },
+        {
+          path: path.changPassword,
+          element: (
+            <Layout>
+              <UserLayout>
+                <ChangePassword />
+              </UserLayout>
+            </Layout>
+          )
+        },
+        {
+          path: path.historyPurchase,
+          element: (
+            <Layout>
+              <UserLayout>
+                <HistoryPurchase />
+              </UserLayout>
             </Layout>
           )
         }

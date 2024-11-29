@@ -1,9 +1,10 @@
-import ProductDetail from 'src/pages/ProductDetail'
-
 const path = {
   home: '/',
-  profile: '/profile',
+  profile: '/user/profile',
+  changPassword: '/user/password',
+  historyPurchase: '/user/purchase',
   login: '/login',
+  user: '/user',
   register: '/register',
   logout: '/logout',
   productDetail: ':nameId',

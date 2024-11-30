@@ -109,6 +109,17 @@ export const schema = yup.object({
   }),
   keyword: yup.string().trim().required('Tìm kiếm sản phẩm bắt buộc')
 })
+export const userSchema=yup.object({
+  fullName:schema.fields['fullName'],
+  phoneNumber:yup.string().max(11,'Độ dài tối đa là 11 ký tự'),
+  andress:yup.string().max(160,'Độ dài tối đa là 160 ký tự'),
+  dateOfBirth:yup.date().max(new Date(),'Hãy chọn một ngày trong quá khứ'),
+  password:schema.fields['password'],
+  confirmPassword:schema.fields['PasswordConfirm'],
+  avatar:yup.string(),
+  email:schema.fields['email']
+})
+export type UserChema=yup.InferType<typeof userSchema>
 export const loginSchema = schema.omit(['PasswordConfirm', 'email', 'fullName'])
 export type LoginSchema = yup.InferType<typeof loginSchema>
 export type Schema = yup.InferType<typeof schema>

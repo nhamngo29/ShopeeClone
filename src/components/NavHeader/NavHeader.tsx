@@ -5,7 +5,7 @@ import path from 'src/constants/path'
 import { AppContext } from 'src/contexts/app.context'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import authApi from 'src/apis/auth.api'
-
+import { getAvatarUrl } from 'src/utils/utils'
 export default function NavHeader() {
   const { isAuthenticated, setIsAuthenticated, profile, setProfile } = useContext(AppContext)
   const queryClient = useQueryClient()
@@ -83,11 +83,12 @@ export default function NavHeader() {
           }
         >
           <div className='w-5 h-5 mr-2 flex-shrink-0'>
-            <img
-              src='https://down-vn.img.susercontent.com/file/vn-11134226-7r98o-lt13iusl0og495_tn'
+<img
+             src={getAvatarUrl(profile?.avatar)}
               alt='avt'
               className='w-full h-full object-cover rounded-full'
             />
+
           </div>
           <Link to={path.profile}>
             <div>{profile?.fullName}</div>

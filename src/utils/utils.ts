@@ -1,7 +1,8 @@
 import axios, { AxiosError, HttpStatusCode } from 'axios'
 import { jwtDecode } from 'jwt-decode'
+import config from 'src/constants/config'
 import { User } from 'src/types/user.type'
-import { array } from 'yup'
+import userNoImage from 'src/assets/no-avatar.svg'
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   return axios.isAxiosError(error)
@@ -52,3 +53,4 @@ export const getIdFromNameId = (nameId: string) => {
   const array = nameId.split('-i.')
   return array[array.length - 1]
 }
+export const getAvatarUrl=(avatarName?:string)=>avatarName?`${config.baseUrl}Resources/${avatarName}`:userNoImage

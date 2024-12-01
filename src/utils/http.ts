@@ -6,13 +6,14 @@ import { getRefreshTokenFormLS, clearFormLS, setRefreshTokenToLS, setProfileToLS
 import { pathApi } from 'src/constants/path'
 import { decodeJwtToUser } from './utils'
 import { AuthResponse } from 'src/types/auth.type'
+import config from 'src/constants/config'
 class Http {
   instance: AxiosInstance
   private refreshToken: string
   constructor() {
     this.refreshToken = getRefreshTokenFormLS()
     this.instance = axios.create({
-      baseURL: 'https://localhost:7224/',
+      baseURL: config.baseUrl,
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json'

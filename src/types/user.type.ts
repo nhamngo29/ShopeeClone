@@ -7,6 +7,6 @@ export interface User {
   email?: string
   fullName?: string
   role?: Role[]
-  address:string,
+  address?:string,
   phoneNumber?:string
 }

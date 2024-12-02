@@ -37,10 +37,12 @@ export default function Register() {
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ResponseApi<FormData>>(error)) {
           const formError = error.response?.data.response
+          console.log('formError',formError)
           if (formError) {
             Object.keys(formError).forEach((key) => {
               if (key in formError) {
-                setError(key as keyof FormData, {
+                const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1); // Chuyển đổi key về chữ thường
+                setError(lowerCaseKey as keyof FormData, {
                   message: formError[key as keyof FormData],
                   type: 'Server'
                 })

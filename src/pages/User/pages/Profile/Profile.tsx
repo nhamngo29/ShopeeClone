@@ -8,12 +8,17 @@ import DateSelect from 'src/components/DateSelect'
 import Input from 'src/components/Input'
 import InputNumber from 'src/components/InputNumber'
 import Toast from 'src/components/Toast'
+import { toast as ToastError } from 'react-toastify' 
 import { AppContext } from 'src/contexts/app.context'
 import { User } from 'src/types/user.type'
+import { ResponseApi } from 'src/types/utils.type'
 import { setProfileToLS } from 'src/utils/auth'
 import { UserChema, userSchema } from 'src/utils/rules'
-import { getAvatarUrl } from 'src/utils/utils'
+import { getAvatarUrl, isAxiosUnprocessableEntityError } from 'src/utils/utils'
 type FromDataInput=Pick<UserChema,'fullName'|'phoneNumber'|'address'|'dateOfBirth'|'avatar'|'email'>
+type FromDataError=Omit<FromDataInput,'dateOfBirth'>&{
+  dateOfBirth?:string
+}
 const profileSchema=userSchema.pick(['fullName','phoneNumber','address','dateOfBirth','avatar','email'])//này dùng cho yun resover
 
 export default function Profile() {
@@ -23,7 +28,7 @@ export default function Profile() {
   const  previewImage=useMemo(()=>{
     return file?URL.createObjectURL(file):''
   },[file])
-  const {register,control,formState:{errors},handleSubmit,setValue}=useForm<FromDataInput>({
+  const {register,control,formState:{errors},handleSubmit,setValue,setError}=useForm<FromDataInput>({
     defaultValues:{
       fullName:'',
       phoneNumber:'',
@@ -47,8 +52,25 @@ export default function Profile() {
 
     },
     onError: (error) => {
-      console.error('Error updating profile', error);
+      if (isAxiosUnprocessableEntityError<ResponseApi<FromDataError>>(error)) {
+        const formError = error.response?.data.response 
+        if (formError) {
+          Object.keys(formError).forEach((key) => {
+            const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1); // Chuyển đổi key về chữ thường
+            console.log('lowerCaseKey',lowerCaseKey)
+            if(lowerCaseKey==='profilePricture')
+              {
+                ToastError.error('Kích thước file phải nhỏ hơn 500kb vui lòng thử lại')
+              }
+              setError(lowerCaseKey as keyof FromDataError, {
+                message: formError[key as keyof FromDataError] as string,
+                type: 'Server'
+              })
+          })
+        }
+      }
     },
+    
   });
   useEffect(()=>{
     if(profile){

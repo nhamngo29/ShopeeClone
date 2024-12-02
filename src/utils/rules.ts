@@ -95,7 +95,7 @@ export const schema = yup.object({
   userName: yup.string().required('Vui lòng nhập tên đăng nhập').min(6, 'Tên đăng phải dài hơn 6 ký tự'),
   fullName: yup
     .string()
-    .required('Vui lòng nhập họ tên')
+    .required('Vui lòng nhập họ và tên.')
     .matches(/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯưẠ-ỹ\s]+$/, 'Họ tên chỉ chứa chữ cái và khoảng trắng'),
   minPrice: yup.string().test({
     name: 'price-not-allowed',
@@ -112,7 +112,6 @@ export const schema = yup.object({
 export const userSchema = yup.object({
   fullName: yup
   .string()
-  .required('Vui lòng nhập họ tên')
   .matches(/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯưẠ-ỹ\s]+$/, 'Họ tên chỉ chứa chữ cái và khoảng trắng'),
   phoneNumber: yup.string().max(11, 'Độ dài tối đa là 11 ký tự'),
   address: yup.string().max(160, 'Độ dài tối đa là 160 ký tự'),

@@ -15,6 +15,7 @@ import { ResponseApi } from 'src/types/utils.type'
 import { setProfileToLS } from 'src/utils/auth'
 import { UserChema, userSchema } from 'src/utils/rules'
 import { getAvatarUrl, isAxiosUnprocessableEntityError } from 'src/utils/utils'
+import config from 'src/constants/config'
 type FromDataInput=Pick<UserChema,'fullName'|'phoneNumber'|'address'|'dateOfBirth'|'avatar'|'email'>
 type FromDataError=Omit<FromDataInput,'dateOfBirth'>&{
   dateOfBirth?:string
@@ -109,6 +110,10 @@ export default function Profile() {
   }
   const onFileChange=(event:React.ChangeEvent<HTMLInputElement>)=>{
     const fileFormLocal=event.target.files?.[0]
+    if(fileFormLocal&&(fileFormLocal?.size>=config.maxSizeUploadAvatar|| fileFormLocal.type.includes('image'))){
+      ToastError.error('File không đúng hình ảnh và vượt quá kích thước vui lòng thử lại')
+      return;
+    }
     setFile(fileFormLocal)
   }
   return (
@@ -175,7 +180,7 @@ export default function Profile() {
                 className='w-full h-full rounded-full object-cover'
               />
             </div>
-            <input type='file' className='hidden' accept='.jpg,.jpeg,.png' name='avatar' ref={fileInputRef} onChange={onFileChange}/>
+            <input type='file' className='hidden' accept='.jpg,.jpeg,.png' name='avatar' ref={fileInputRef}  onClick={(e)=>{(e.target as any).value=null}} onChange={onFileChange}/>
             <button className='flex h-10 items-center justify-end rounded-sm border bg-white px-6 text-sm text-gray-600 shadow-sm' type='button' onClick={handleUpload}>
               Chọn ảnh
             </button>

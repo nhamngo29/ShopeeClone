@@ -12,5 +12,8 @@ const userApi={
           headers: { 'Content-Type': 'multipart/form-data' },
         });
       },
+    changePassword(body:{password:string,newPassword:string,confirmPassword:string}){
+      return http.post<ResponseApi<User>>('api/User/change-password',body)
+    }
 }
 export default userApi

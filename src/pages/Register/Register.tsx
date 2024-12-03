@@ -11,8 +11,8 @@ import { useContext } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/components/Button'
 import path from 'src/constants/path'
-type FormData = Pick<Schema, 'email' | 'password' | 'PasswordConfirm' | 'fullName' | 'userName'>
-const registerSchema = schema.pick(['email', 'PasswordConfirm', 'fullName', 'password', 'userName'])
+type FormData = Pick<Schema, 'email' | 'password' | 'confirmPassword' | 'fullName' | 'userName'>
+const registerSchema = schema.pick(['email', 'confirmPassword', 'fullName', 'password', 'userName'])
 export default function Register() {
   const {
     register,
@@ -94,11 +94,11 @@ export default function Register() {
                 autoComplete='on'
               />
               <Input
-                name='PasswordConfirm'
+                name='confirmPassword'
                 register={register}
                 type='password'
                 className='mt-2'
-                errorMessage={errors.PasswordConfirm?.message}
+                errorMessage={errors.confirmPassword?.message}
                 placeholder='Mật khẩu'
                 autoComplete='on'
               />

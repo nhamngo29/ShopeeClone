@@ -84,14 +84,14 @@ export const schema = yup.object({
     .matches(/[a-z]/, 'Mật khẩu phải có ít nhất một ký tự viết thường')
     .matches(/[0-9]/, 'Mật khẩu phải có ít nhất một chữ số')
     .matches(/[#?!@$%^&*-]/, 'Mật khẩu phải có ít nhất một ký tự đặc biệt'),
-  PasswordConfirm: yup.string().required('Vui lòng nhập lại mật khẩu'),
-  // .min(8, 'Nhập lại mật khẩu bắt buộc có độ dài lớn hơn 7 ký tự')
-  // .max(160, 'Nhập lại mật khẩu tối đa 160 ký tự')
-  // .matches(/[A-Z]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự viết hoa')
-  // .matches(/[a-z]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự viết thường')
-  // .matches(/[0-9]/, 'Nhập lại mật khẩu phải có ít nhất một chữ số')
-  // .matches(/[#?!@$%^&*-]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự đặc biệt')
-  // .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không khớp'),
+  confirmPassword: yup.string().required('Vui lòng nhập lại mật khẩu')
+  .min(8, 'Nhập lại mật khẩu bắt buộc có độ dài lớn hơn 7 ký tự')
+  .max(160, 'Nhập lại mật khẩu tối đa 160 ký tự')
+  .matches(/[A-Z]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự viết hoa')
+  .matches(/[a-z]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự viết thường')
+  .matches(/[0-9]/, 'Nhập lại mật khẩu phải có ít nhất một chữ số')
+  .matches(/[#?!@$%^&*-]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự đặc biệt')
+  .oneOf([yup.ref('password')], 'Nhập lại mật khẩu không khớp'),
   userName: yup.string().required('Vui lòng nhập tên đăng nhập').min(6, 'Tên đăng phải dài hơn 6 ký tự'),
   fullName: yup
     .string()
@@ -116,12 +116,34 @@ export const userSchema = yup.object({
   phoneNumber: yup.string().max(11, 'Độ dài tối đa là 11 ký tự'),
   address: yup.string().max(160, 'Độ dài tối đa là 160 ký tự'),
   dateOfBirth: yup.date().max(new Date(), 'Hãy chọn một ngày trong quá khứ'),
-  password: schema.fields['password'],
-  confirmPassword: schema.fields['PasswordConfirm'],
+  password: yup.string()
+  .required('Vui lòng nhập mật khẩu')
+  .min(8, 'Mật khẩu bắt buộc có độ dài lớn hơn 7 ký tự')
+  .max(160, 'Mật khẩu tối đa 160 ký tự')
+  .matches(/[A-Z]/, 'Mật khẩu phải có ít nhất một ký tự viết hoa')
+  .matches(/[a-z]/, 'Mật khẩu phải có ít nhất một ký tự viết thường')
+  .matches(/[0-9]/, 'Mật khẩu phải có ít nhất một chữ số')
+  .matches(/[#?!@$%^&*-]/, 'Mật khẩu phải có ít nhất một ký tự đặc biệt'),
+  newPassword: yup.string()
+  .required('Vui lòng nhập mật khẩu')
+  .min(8, 'Mật khẩu bắt buộc có độ dài lớn hơn 7 ký tự')
+  .max(160, 'Mật khẩu tối đa 160 ký tự')
+  .matches(/[A-Z]/, 'Mật khẩu phải có ít nhất một ký tự viết hoa')
+  .matches(/[a-z]/, 'Mật khẩu phải có ít nhất một ký tự viết thường')
+  .matches(/[0-9]/, 'Mật khẩu phải có ít nhất một chữ số')
+  .matches(/[#?!@$%^&*-]/, 'Mật khẩu phải có ít nhất một ký tự đặc biệt'),
+  confirmPassword: yup.string().required('Vui lòng nhập lại mật khẩu')
+  .min(8, 'Nhập lại mật khẩu bắt buộc có độ dài lớn hơn 7 ký tự')
+  .max(160, 'Nhập lại mật khẩu tối đa 160 ký tự')
+  .matches(/[A-Z]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự viết hoa')
+  .matches(/[a-z]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự viết thường')
+  .matches(/[0-9]/, 'Nhập lại mật khẩu phải có ít nhất một chữ số')
+  .matches(/[#?!@$%^&*-]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự đặc biệt')
+  .oneOf([yup.ref('newPassword')], 'Nhập lại mật khẩu không khớp'),
   avatar: yup.string().max(1800, 'Độ dài tối đa là 160 ký tự'),
   email: schema.fields['email']
 });
 export type UserChema=yup.InferType<typeof userSchema>
-export const loginSchema = schema.omit(['PasswordConfirm', 'email', 'fullName'])
+export const loginSchema = schema.omit(['confirmPassword', 'email', 'fullName'])
 export type LoginSchema = yup.InferType<typeof loginSchema>
 export type Schema = yup.InferType<typeof schema>

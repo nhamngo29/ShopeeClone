@@ -10,6 +10,7 @@ import { ResponseApi } from 'src/types/utils.type'
 import { useContext, useState } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/components/Button'
+import InputPassword from 'src/components/InputPassword'
 type FormData = Pick<Schema, 'userName' | 'password'>
 const loginSchema = schema.pick(['userName', 'password'])
 export default function Login() {
@@ -80,7 +81,7 @@ export default function Login() {
                 errorMessage={errors.userName?.message}
                 placeholder='Tên đăng nhập'
               />
-              <Input
+              <InputPassword
                 name='password'
                 register={register}
                 type='password'

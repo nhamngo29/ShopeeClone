@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import productApi from 'src/apis/product.api'
 import ProductRating from 'src/components/ProductRating'
 import { formatCurrency, formatNumberToSocialStyle, getIdFromNameId } from 'src/utils/utils'
@@ -12,6 +12,7 @@ import Product from '../ProductList/components/Product'
 import QuantityController from 'src/components/QuantityController'
 import cartApi from 'src/apis/cart.api'
 import Toast from 'src/components/Toast'
+import path from 'src/constants/path'
 
 export default function ProductDetail() {
   const queryClient = useQueryClient()
@@ -28,6 +29,7 @@ export default function ProductDetail() {
   const product = productDetailData?.data.response
   const currentImages = useMemo(() => product?.images.slice(...currentIndexImages), [product, currentIndexImages])
   const queryConfig: ProductListConfig = { page: '1', categoryId: product?.cateogryId }
+  const navigate=useNavigate()
   const { data: productsData } = useQuery({
     queryKey: ['products', queryConfig],
     queryFn: () => {
@@ -74,6 +76,18 @@ export default function ProductDetail() {
         }
       }
     )
+  }
+  const handleBuyNow=async ()=>{
+    const res=await addToCartMutation.mutateAsync(
+      {
+        quantity: buyCount,
+        productId: product?.productId as string
+      }
+    )
+    const purchase=res.data.response
+    navigate(path.cart,{state:{
+      productId:purchase?.productId
+    }})
   }
   if (!product) return <div>Loading...</div>
   return (
@@ -195,7 +209,8 @@ export default function ProductDetail() {
                     </svg>
                     Thêm vào giỏ hàng
                   </button>
-                  <button className='ml-5 flex h-12 items-center justify-center outline-none rounded-sm bg-orange text-white capitalize shadow-sm hover:bg-orange/90 px-5'>
+                  <button className='ml-5 flex h-12 items-center justify-center outline-none rounded-sm bg-orange text-white capitalize shadow-sm hover:bg-orange/90 px-5'
+                  onClick={handleBuyNow}>
                     mua ngay
                   </button>
                 </div>

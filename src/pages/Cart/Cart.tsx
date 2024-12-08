@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Fragment, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import cartApi from 'src/apis/cart.api'
 import Button from 'src/components/Button'
 import QuantityController from 'src/components/QuantityController'
@@ -41,6 +41,8 @@ export default function Cart() {
       refetch()
     }
   })
+  const location=useLocation()
+  const chooseProductIdFromLocation=(location.state as {productId:string}|null)?.productId
   const orderMutation=useMutation({
     mutationFn:orderApi.order,
     onSuccess:()=>{
@@ -58,13 +60,15 @@ export default function Cart() {
 
   useEffect(() => {
     setExtendedPurchases(
-      producstInCartData?.products.map((cartItem) => ({
+      producstInCartData?.products.map((cartItem) => {
+        const isChooseProductFormLocaltion=chooseProductIdFromLocation===cartItem.productId
+        return{
         ...cartItem,
         disabled: false,
-        checked: false
-      })) || []
+        checked: isChooseProductFormLocaltion||false
+  }}) || []
     )
-  }, [producstInCartData])
+  }, [producstInCartData,chooseProductIdFromLocation])
   const handleCheck = (cartIndex: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setExtendedPurchases(
       produce((draft) => {

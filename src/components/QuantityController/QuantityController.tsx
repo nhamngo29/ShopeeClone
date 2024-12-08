@@ -1,7 +1,10 @@
 import { useState } from 'react'
-import InputNumber, { InputNumberProps } from '../InputNumber'
+import InputNumber from '../InputNumber'
+import { InputNumberProps } from '../InputNumber/InputNumber'
+
 interface Props extends InputNumberProps {
   max?: number
+  min?:number
   defaultValue?: number
   onIncrease?: (value: number) => void
   onDecrease?: (value: number) => void
@@ -16,8 +19,8 @@ export default function QuantityController({
   defaultValue = 1,
   classNameWrapper = 'ml-10',
   value,
-  onFocusOut,
   min,
+  onFocusOut,
   onType,
   ...res
 }: Props) {

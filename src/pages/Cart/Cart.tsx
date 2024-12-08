@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import cartApi from 'src/apis/cart.api'
 import Button from 'src/components/Button'
@@ -8,6 +8,8 @@ import path from 'src/constants/path'
 import { CartItem } from 'src/types/cart.type'
 import { formatCurrency, generateNameId } from 'src/utils/utils'
 import { produce } from 'immer'
+import orderApi from 'src/apis/order.api'
+import Toast from 'src/components/Toast'
 interface ExtendedCartItem extends CartItem {
   disabled: boolean
   checked: boolean
@@ -19,6 +21,7 @@ export default function Cart() {
     queryKey: ['getItemsInCart'],
     queryFn: () => cartApi.getItemsInCart()
   })
+  const [showToast, setShowToast] = useState(false) // Trạng thái hiển thị Toast
   const updateCartItemMutation = useMutation({
     mutationFn: cartApi.updateCartItem,
     onSuccess: (_, body) => {
@@ -36,6 +39,13 @@ export default function Cart() {
     mutationFn: cartApi.deleteCartItem,
     onSuccess: () => {
       refetch()
+    }
+  })
+  const orderMutation=useMutation({
+    mutationFn:orderApi.order,
+    onSuccess:()=>{
+      refetch(),
+      setShowToast(true)
     }
   })
   const producstInCartData = productInCartData?.data.response
@@ -101,8 +111,19 @@ export default function Cart() {
     const cartItems = checkedCartItems.map((cartItem) => cartItem.productId)
     deleteCartImtesMutation.mutate(cartItems)
   }
+  const handleBuyPurchaes=()=>{
+    if(checkedCartItems.length>0){
+      const body=checkedCartItems.map(cartItem=>({
+        productId:cartItem.productId,
+        quantity:cartItem.quantity
+      }))
+      orderMutation.mutate(body)
+    }
+  }
   return (
-    <div className='bg-neutral-100 py-4 md:py-16'>
+    <Fragment>
+            {showToast && <Toast message='Mua sản phẩm thành công' />}
+      <div className='bg-neutral-100 py-4 md:py-16'>
       <div className='container px-4 md:px-0'>
         {/* Desktop table header - hidden on mobile */}
         <div className='hidden md:block overflow-auto'>
@@ -255,7 +276,7 @@ export default function Cart() {
                   <div className='ml-6 text-orange line-through'>₫{formatCurrency(totalCheckedCartItemsPrice)}</div>
                 </div>
               </div>
-              <Button className='w-full md:w-44 h-10 mt-3 md:mt-0 md:ml-4 bg-orange uppercase text-center text-white text-sm hover:opacity-85 font-bold inline-flex justify-center items-center'>
+              <Button className='w-full md:w-44 h-10 mt-3 md:mt-0 md:ml-4 bg-orange uppercase text-center text-white text-sm hover:opacity-85 font-bold inline-flex justify-center items-center' onClick={handleBuyPurchaes} disabled={orderMutation.isPending}>
                 Mua hàng
               </Button>
             </div>
@@ -263,5 +284,6 @@ export default function Cart() {
         </div>
       </div>
     </div>
+    </Fragment>
   )
 }

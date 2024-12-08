@@ -23,6 +23,7 @@ export const pathApi = {
   deleteCartItem: 'api/Cart/delete-cart-item',
   updateCartItem: 'api/Cart/update-cart-item',
   profile:'api/User/me',
-  uploadAvatar:'api/User/upload-avatar'
+  uploadAvatar:'api/User/upload-avatar',
+  order:'api/Order'
 } as const
 export default path

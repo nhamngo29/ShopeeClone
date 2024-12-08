@@ -84,7 +84,7 @@ export const schema = yup.object({
     .matches(/[a-z]/, 'Mật khẩu phải có ít nhất một ký tự viết thường')
     .matches(/[0-9]/, 'Mật khẩu phải có ít nhất một chữ số')
     .matches(/[#?!@$%^&*-]/, 'Mật khẩu phải có ít nhất một ký tự đặc biệt'),
-  confirmPassword: yup.string().required('Vui lòng nhập lại mật khẩu')
+    confirmPassword: yup.string().required('Vui lòng nhập lại mật khẩu')
   .min(8, 'Nhập lại mật khẩu bắt buộc có độ dài lớn hơn 7 ký tự')
   .max(160, 'Nhập lại mật khẩu tối đa 160 ký tự')
   .matches(/[A-Z]/, 'Nhập lại mật khẩu phải có ít nhất một ký tự viết hoa')

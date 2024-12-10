@@ -19,6 +19,7 @@ export default function ProductList() {
     staleTime: 3 * 60 * 1000 //3 phút
   })
   const { data: categoriesData } = useQuery({
+    
     queryKey: ['categoies'],
     queryFn: () => {
       return categoryAPi.getCategories()

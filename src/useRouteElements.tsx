@@ -1,20 +1,22 @@
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import ProductList from './pages/ProductList'
-import Login from './pages/Login'
+//import Login from './pages/Login'
 import Register from './pages/Register'
-import { useContext } from 'react'
+import { useContext, lazy, Suspense } from 'react'
 import { AppContext } from './contexts/app.context'
 import path from './constants/path'
-import ProductDetail from './pages/ProductDetail'
-import Cart from './pages/Cart'
-import RegisterHeader from './components/RegisterHeader'
 import Layout from './layouts'
 import CartHeader from './components/CartHeader'
 import UserLayout from './pages/User/UserLayout'
-import ChangePassword from './pages/User/pages/ChangePassword'
-import HistoryPurchase from './pages/User/pages/HistoryPurchase'
-import Profile from './pages/User/pages/Profile'
-import NotFound from './pages/NotFound'
+
+const Login = lazy(() => import('./pages/Login'))
+const ProductDetail = lazy(() => import('./pages/ProductDetail'))
+const Cart = lazy(() => import('./pages/Cart'))
+const ChangePassword = lazy(() => import('./components/RegisterHeader'))
+const RegisterHeader = lazy(() => import('./pages/User/pages/ChangePassword'))
+const HistoryPurchase = lazy(() => import('./pages/User/pages/HistoryPurchase'))
+const Profile = lazy(() => import('./pages/User/pages/Profile'))
+const NotFound = lazy(() => import('./pages/NotFound'))
 
 function ProtectedRouted() {
   const { isAuthenticated } = useContext(AppContext)
@@ -40,7 +42,9 @@ export default function useRouteElements() {
       path: path.cart,
       element: (
         <Layout Header={<CartHeader />}>
-          <Cart />
+          <Suspense fallback={<div>Loading</div>}>
+            <Cart />
+          </Suspense>
         </Layout>
       )
     },
@@ -53,7 +57,9 @@ export default function useRouteElements() {
           element: (
             <Layout>
               <UserLayout>
-                <Profile />
+                <Suspense fallback={<div>Loading</div>}>
+                  <Profile />
+                </Suspense>
               </UserLayout>
             </Layout>
           )
@@ -69,7 +75,9 @@ export default function useRouteElements() {
           element: (
             <Layout>
               <UserLayout>
-                <Profile />
+                <Suspense fallback={<div>Loading</div>}>
+                  <Profile />
+                </Suspense>
               </UserLayout>
             </Layout>
           )
@@ -79,7 +87,9 @@ export default function useRouteElements() {
           element: (
             <Layout>
               <UserLayout>
-                <ChangePassword />
+                <Suspense fallback={<div>Loading</div>}>
+                  <ChangePassword />
+                </Suspense>
               </UserLayout>
             </Layout>
           )
@@ -89,7 +99,9 @@ export default function useRouteElements() {
           element: (
             <Layout>
               <UserLayout>
-                <HistoryPurchase />
+                <Suspense fallback={<div>Loading</div>}>
+                  <HistoryPurchase />
+                </Suspense>
               </UserLayout>
             </Layout>
           )
@@ -101,7 +113,9 @@ export default function useRouteElements() {
       index: true,
       element: (
         <Layout>
-          <ProductDetail />
+          <Suspense fallback={<div>Loading</div>}>
+            <ProductDetail />
+          </Suspense>
         </Layout>
       )
     },
@@ -113,7 +127,9 @@ export default function useRouteElements() {
           path: path.login,
           element: (
             <Layout Header={<RegisterHeader />}>
-              <Login />
+              <Suspense fallback={<div>Loading</div>}>
+                <Login />
+              </Suspense>
             </Layout>
           )
         },
@@ -121,15 +137,17 @@ export default function useRouteElements() {
           path: path.register,
           element: (
             <Layout Header={<RegisterHeader />}>
-              <Register />
+              <Suspense fallback={<div>Loading</div>}>
+                <Register />
+              </Suspense>
             </Layout>
           )
         }
       ]
-    },{
-      path:"*",
-      element:(
-        <NotFound/>
+    }, {
+      path: "*",
+      element: (
+        <NotFound />
       )
     }
   ])

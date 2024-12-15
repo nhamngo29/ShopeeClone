@@ -1,7 +1,8 @@
-import { pathApi } from "src/constants/path"
+
 import { User } from "src/types/user.type"
 import { ResponseApi } from "src/types/utils.type"
 import http from "src/utils/http"
+import { pathApi } from "./auth.api"
 const userApi={
     
     getProfile(){

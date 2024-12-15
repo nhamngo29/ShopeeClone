@@ -3,12 +3,13 @@ import ProductRating from 'src/components/ProductRating'
 import path from 'src/constants/path'
 import { Product as ProductType } from 'src/types/product.type'
 import { formatCurrency, formatNumberToSocialStyle, generateNameId } from 'src/utils/utils'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   product: ProductType
 }
 export default function Product({ product }: Props) {
-
+  const { t } = useTranslation('product')
   return (
     <Link to={`${path.home}${generateNameId({ name: product.name, id: product.productId })}`}>
       <div className='bg-white shadow rounded-sm hover:translate-y-[-0.0625rem] border border-transparent hover:border hover:border-orange hover:shadow-md duration-100 transition-all'>
@@ -39,7 +40,7 @@ export default function Product({ product }: Props) {
             <ProductRating rating={product.rating} />
             <div className='ml-2 text-sm'>
               <span className=' lowercase'>{formatNumberToSocialStyle(product.sold)}</span>
-              <span className='ml-1'>Đã bán</span>
+              <span className='ml-1'>{t('sold')}</span>
             </div>
           </div>
         </div>

@@ -13,8 +13,10 @@ import QuantityController from 'src/components/QuantityController'
 import cartApi from 'src/apis/cart.api'
 import Toast from 'src/components/Toast'
 import path from 'src/constants/path'
+import { useTranslation } from 'react-i18next'
 
 export default function ProductDetail() {
+  const { t } = useTranslation('product')
   const queryClient = useQueryClient()
   const [buyCount, setBuyCount] = useState(1)
   const { nameId } = useParams()
@@ -29,7 +31,7 @@ export default function ProductDetail() {
   const product = productDetailData?.data.response
   const currentImages = useMemo(() => product?.images.slice(...currentIndexImages), [product, currentIndexImages])
   const queryConfig: ProductListConfig = { page: '1', categoryId: product?.cateogryId }
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const { data: productsData } = useQuery({
     queryKey: ['products', queryConfig],
     queryFn: () => {
@@ -77,17 +79,19 @@ export default function ProductDetail() {
       }
     )
   }
-  const handleBuyNow=async ()=>{
-    const res=await addToCartMutation.mutateAsync(
+  const handleBuyNow = async () => {
+    const res = await addToCartMutation.mutateAsync(
       {
         quantity: buyCount,
         productId: product?.productId as string
       }
     )
-    const purchase=res.data.response
-    navigate(path.cart,{state:{
-      productId:purchase?.productId
-    }})
+    const purchase = res.data.response
+    navigate(path.cart, {
+      state: {
+        productId: purchase?.productId
+      }
+    })
   }
   if (!product) return <div>Loading...</div>
   return (
@@ -186,7 +190,7 @@ export default function ProductDetail() {
                     value={buyCount}
                     max={product.stock}
                   />
-                  <div className='ml-6 text-sm text-gray-500'>{product.stock} sản phẩm có sẵn</div>
+                  <div className='ml-6 text-sm text-gray-500'>{product.stock} {t('available')}</div>
                 </div>
                 <div className='mt-8 flex items-center'>
                   <button
@@ -210,7 +214,7 @@ export default function ProductDetail() {
                     Thêm vào giỏ hàng
                   </button>
                   <button className='ml-5 flex h-12 items-center justify-center outline-none rounded-sm bg-orange text-white capitalize shadow-sm hover:bg-orange/90 px-5'
-                  onClick={handleBuyNow}>
+                    onClick={handleBuyNow}>
                     mua ngay
                   </button>
                 </div>

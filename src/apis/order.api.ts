@@ -1,9 +1,8 @@
-
-import { pathApi } from "src/constants/path";
 import { OrderItemList } from "src/types/order.type";
 import { ResponseApi } from "src/types/utils.type";
 import http from "src/utils/http";
 import { OrderStatus } from "src/types/orderStatus.type";
+import { pathApi } from "./auth.api";
 
 const orderApi={
     order(body:{ productId: string; quantity: number }[]){

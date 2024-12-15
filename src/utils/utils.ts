@@ -1,8 +1,9 @@
-import axios, { AxiosError, HttpStatusCode } from 'axios'
+import axios, { AxiosError } from 'axios'
 import { jwtDecode } from 'jwt-decode'
 import config from 'src/constants/config'
 import { User } from 'src/types/user.type'
 import userNoImage from 'src/assets/no-avatar.svg'
+import HttpStatusCode from 'src/constants/httpStatuscode.enum'
 
 export function isAxiosError<T>(error: unknown): error is AxiosError<T> {
   return axios.isAxiosError(error)
@@ -16,10 +17,12 @@ export function isAxiosUnprocessableEntityError<FormError>(error: unknown): erro
   )
 }
 //Dùng cho Unauthorized
-export function isAxiosUnauthorized<FormError>(error: unknown): error is AxiosError<FormError> {
+export function isAxiosUnauthorized<UnauthorizedError>(error: unknown): error is AxiosError<UnauthorizedError> {
   return isAxiosError(error) && error.response?.status === HttpStatusCode.Unauthorized
 }
-
+export function isAxiosExpiredRefreshTokenError<UnauthorizedError>(error: unknown): error is AxiosError<UnauthorizedError> {
+  return isAxiosError(error) && error.response?.status === HttpStatusCode.ExpiredRefreshToken
+}
 export function decodeJwtToUser(tokenJwt: string): User {
   const decoded: any = jwtDecode(tokenJwt)
   const userProfile: User = {

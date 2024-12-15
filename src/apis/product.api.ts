@@ -1,7 +1,7 @@
-import { pathApi } from 'src/constants/path'
 import { Product, ProductList, ProductListConfig } from 'src/types/product.type'
 import { ResponseApi } from 'src/types/utils.type'
 import http from 'src/utils/http'
+import { pathApi } from './auth.api'
 
 const productApi = {
   getProducts: (params: ProductListConfig) => {

@@ -1,19 +1,19 @@
 import { Navigate, Outlet, useRoutes } from 'react-router-dom'
 import ProductList from './pages/ProductList'
 //import Login from './pages/Login'
-import Register from './pages/Register'
 import { useContext, lazy, Suspense } from 'react'
 import { AppContext } from './contexts/app.context'
 import path from './constants/path'
 import Layout from './layouts'
 import CartHeader from './components/CartHeader'
 import UserLayout from './pages/User/UserLayout'
+import RegisterHeader from './components/RegisterHeader/RegisterHeader'
 
 const Login = lazy(() => import('./pages/Login'))
+const Register = lazy(() => import('./pages/Register'))
 const ProductDetail = lazy(() => import('./pages/ProductDetail'))
 const Cart = lazy(() => import('./pages/Cart'))
-const ChangePassword = lazy(() => import('./components/RegisterHeader'))
-const RegisterHeader = lazy(() => import('./pages/User/pages/ChangePassword'))
+const ChangePassword = lazy(() => import('./pages/User/pages/ChangePassword'))
 const HistoryPurchase = lazy(() => import('./pages/User/pages/HistoryPurchase'))
 const Profile = lazy(() => import('./pages/User/pages/Profile'))
 const NotFound = lazy(() => import('./pages/NotFound'))
@@ -37,7 +37,6 @@ export default function useRouteElements() {
         </Layout>
       )
     },
-
     {
       path: path.cart,
       element: (
@@ -49,22 +48,15 @@ export default function useRouteElements() {
       )
     },
     {
-      path: path.profile,
-      element: <ProtectedRouted />,
-      children: [
-        {
-          path: path.profile,
-          element: (
-            <Layout>
-              <UserLayout>
-                <Suspense fallback={<div>Loading</div>}>
-                  <Profile />
-                </Suspense>
-              </UserLayout>
-            </Layout>
-          )
-        }
-      ]
+      path: path.productDetail,
+      index: true,
+      element: (
+        <Layout>
+          <Suspense fallback={<div>Loading</div>}>
+            <ProductDetail />
+          </Suspense>
+        </Layout>
+      )
     },
     {
       path: path.user,
@@ -108,17 +100,7 @@ export default function useRouteElements() {
         }
       ]
     },
-    {
-      path: path.productDetail,
-      index: true,
-      element: (
-        <Layout>
-          <Suspense fallback={<div>Loading</div>}>
-            <ProductDetail />
-          </Suspense>
-        </Layout>
-      )
-    },
+
     {
       path: '',
       element: <RejectedRouted />,

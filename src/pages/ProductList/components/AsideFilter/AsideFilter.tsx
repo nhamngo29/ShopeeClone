@@ -1,6 +1,6 @@
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Button from 'src/components/Button'
-import path, { pathApi } from 'src/constants/path'
+import path from 'src/constants/path'
 import { Category } from 'src/types/category.type'
 import classNames from 'classnames'
 import { omit } from 'lodash'
@@ -11,6 +11,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import RatingStarts from '../RatingStarts'
 import { QueryConfig } from 'src/hooks/useQueryConfig'
 import InputV2 from 'src/components/InputV2'
+import { pathApi } from 'src/apis/auth.api'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   queryConfig: QueryConfig
@@ -24,6 +26,7 @@ các rules validation khoảng giá
 */
 const priceSchema = schema.pick(['minPrice', 'maxPrice'])
 export default function AsideFilter({ queryConfig, categories }: Props) {
+  const { t } = useTranslation()
   const { categoryId } = queryConfig
   const {
     control,
@@ -84,7 +87,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
             </g>
           </g>
         </svg>
-        Tất cả danh mục
+        {t('aside filter.all category')}
       </Link>
       <div className='bg-gray-300 h-[1px] my-4' />
       <ul>
@@ -138,7 +141,7 @@ export default function AsideFilter({ queryConfig, categories }: Props) {
             />
           </g>
         </svg>
-        Bộ lọc tìm kiếm
+        {t('aside filter.filter search')}
       </Link>
       <div className='bg-gray-300 h-[1px] my-4' />
       <div className='my-5'>

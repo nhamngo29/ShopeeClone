@@ -6,3 +6,4 @@ export type AuthResponse = ResponseApi<{
   refreshToken: string
   expiresRefreshToken: string
 }>
+export type RefreshTokenReponse=ResponseApi<{token:string,refreshToken:string}>

@@ -51,6 +51,7 @@ enum HttpStatusCode {
   TooManyRequests = 429,
   RequestHeaderFieldsTooLarge = 431,
   UnavailableForLegalReasons = 451,
+  ExpiredRefreshToken=498,
   InternalServerError = 500,
   NotImplemented = 501,
   BadGateway = 502,

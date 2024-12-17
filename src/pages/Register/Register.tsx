@@ -12,6 +12,7 @@ import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/components/Button'
 import path from 'src/constants/path'
 import InputPassword from 'src/components/InputPassword'
+import { Helmet } from 'react-helmet-async'
 type FormData = Pick<Schema, 'email' | 'password' | 'confirmPassword' | 'fullName' | 'userName'>
 const registerSchema = schema.pick(['email', 'confirmPassword', 'fullName', 'password', 'userName'])
 export default function Register() {
@@ -38,7 +39,7 @@ export default function Register() {
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ResponseApi<FormData>>(error)) {
           const formError = error.response?.data.response
-          console.log('formError',formError)
+          console.log('formError', formError)
           if (formError) {
             Object.keys(formError).forEach((key) => {
               if (key in formError) {
@@ -56,6 +57,10 @@ export default function Register() {
   })
   return (
     <div className='bg-orange'>
+      <Helmet>
+        <title>Đăng ký tài khoản - Mua sắm Online | Nhâm Ngọ</title>
+        <meta name="description" content="Đăng ký tài khoản Shopee Clone | Nhâm Ngọ" />
+      </Helmet>
       <div className='container'>
         <div className='grid grid-cols-1 lg:grid-cols-5 lg:py-32 lg:pr-10'>
           <div className='lg:col-span-2 lg:col-start-4'>

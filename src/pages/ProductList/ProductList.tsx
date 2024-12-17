@@ -7,6 +7,7 @@ import Pagination from 'src/components/Pagination'
 import { ProductListConfig } from 'src/types/product.type'
 import categoryAPi from 'src/apis/category.api'
 import useQueryConfig from 'src/hooks/useQueryConfig'
+import { Helmet } from 'react-helmet-async'
 
 export default function ProductList() {
   const queryConfig = useQueryConfig()
@@ -19,7 +20,7 @@ export default function ProductList() {
     staleTime: 3 * 60 * 1000 //3 phút
   })
   const { data: categoriesData } = useQuery({
-    
+
     queryKey: ['categoies'],
     queryFn: () => {
       return categoryAPi.getCategories()
@@ -30,6 +31,10 @@ export default function ProductList() {
   console.log('productsData', productsData)
   return (
     <div className='bg-gray-200 py-6'>
+      <Helmet>
+        <title>Trang chủ | Shopee Clone</title>
+        <meta name="description" content={`Trang chủ. Mua hàng qua mạng uy tín, tiện lợi. Shopee Clone đảm bảo nhận hàng, hoặc được hoàn lại tiền Giao Hàng Miễn Phí. XEM NGAY!`} />
+      </Helmet>
       <div className='container'>
         {productsData && (
           <div className='grid grid-cols-12 gap-6'>

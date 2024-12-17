@@ -14,8 +14,10 @@ import cartApi from 'src/apis/cart.api'
 import Toast from 'src/components/Toast'
 import path from 'src/constants/path'
 import { useTranslation } from 'react-i18next'
-
+import { Helmet } from 'react-helmet-async'
+import { convert } from 'html-to-text'
 export default function ProductDetail() {
+
   const { t } = useTranslation('product')
   const queryClient = useQueryClient()
   const [buyCount, setBuyCount] = useState(1)
@@ -96,6 +98,10 @@ export default function ProductDetail() {
   if (!product) return <div>Loading...</div>
   return (
     <>
+      <Helmet>
+        <title>{product.name} | Shopee Clone</title>
+        <meta name="description" content={`${convert(product.description, { limits: { maxInputLength: 120 } })}. Mua hàng qua mạng uy tín, tiện lợi. Shopee Clone đảm bảo nhận hàng, hoặc được hoàn lại tiền Giao Hàng Miễn Phí. XEM NGAY!`} />
+      </Helmet>
       {showToast && <Toast message='Thêm sản phẩm vào giỏ hàng thành công' />}
       <div className='bg-gray-200 py-6'>
         <div className='container'>

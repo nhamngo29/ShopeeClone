@@ -11,6 +11,7 @@ import { useContext, useState } from 'react'
 import { AppContext } from 'src/contexts/app.context'
 import Button from 'src/components/Button'
 import InputPassword from 'src/components/InputPassword'
+import { Helmet } from 'react-helmet-async'
 type FormData = Pick<Schema, 'userName' | 'password'>
 const loginSchema = schema.pick(['userName', 'password'])
 export default function Login() {
@@ -56,6 +57,10 @@ export default function Login() {
   })
   return (
     <div className='bg-orange'>
+      <Helmet>
+        <title>Đăng nhập tài khoản - Mua sắm Online | Nhâm Ngọ</title>
+        <meta name="description" content="Đăng nhập vào tài khoản Shopee Clone | Nhâm Ngọ" />
+      </Helmet>
       <div className='container'>
         <div className='grid grid-cols-1 lg:grid-cols-5 lg:py-32 lg:pr-10'>
           <div className='p-10  lg:col-span-2 lg:col-start-4  bg-white shadow-sm'>

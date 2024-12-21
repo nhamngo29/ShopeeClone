@@ -20,12 +20,14 @@ class Http {
       headers: {
         'Content-Type': 'application/json'
       },
+      
       withCredentials: true // Đảm bảo rằng đây được đặt
     })
     this.instance.interceptors.request.use(
       (config) => {
         if (this.refreshToken && config.headers) {
-          config.withCredentials = true // Gửi cookie đi kèm
+          config.withCredentials = true // Gửi cookie đi kèm,
+          
           return config
         }
         return config
@@ -50,6 +52,7 @@ class Http {
         return response
       },
       (error: AxiosError) => {
+        console.log(error)
         const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
         if (
           ![HttpStatusCode.UnprocessableEntity, HttpStatusCode.Conflict, HttpStatusCode.Unauthorized, HttpStatusCode.ExpiredRefreshToken].includes(

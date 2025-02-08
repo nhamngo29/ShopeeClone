@@ -73,7 +73,7 @@ class Http {
             : this.handleRefreshToken().finally(() => {
                 setTimeout(()=>{
                   this.refreshTokenRequest = null
-                },50000)
+                },1000)
               })
 
           return this.refreshTokenRequest
